@@ -1,5 +1,7 @@
 # SYS 6018
-# Kaggle Competition - Google 
+# Kaggle Competition - Google
+
+# OLS and Random Forest 
 
 ##########
 # Part 1 #
@@ -681,6 +683,7 @@ test.final$fullVisitorId = NULL
 # library(parallel)
 # registerDoParallel(detectCores())
 # 
+# # Do the cross validation
 # glm_model = cv.glmnet(train.list,Y,alpha=1,parallel=TRUE)
 # 
 # plot(glm_model)
@@ -688,8 +691,8 @@ test.final$fullVisitorId = NULL
 # # Get min lambda
 # lam=glm_model$lambda.min
 # lam
-# 
-# # Predict
+#
+# # Predict using the best model from cross validation.
 # pred=predict(glm_model, test.list, type="response", s=lam)
 # hist(pred, breaks=100)
 # 
@@ -754,7 +757,7 @@ library(caret)
 train.rf = train.final
 test.rf = test.final
 
-# Drop certain columns that don't make sense
+# Drop certain columns that don't make sense to keep
 train.rf$date = NULL
 train.rf$sessionId = NULL
 train.rf$visitStartTime  = NULL
@@ -765,7 +768,7 @@ test.rf$visitStartTime  = NULL
 test.rf$visitId = NULL
 
 # We have a big problem, the vector size is too large. Reduce by selecting only
-# a few predictors.
+# a few predictors. IF USING AWS, KEEP ALL OF THESE
 
 names(train.rf)
 train.rf$visitNumber = NULL
@@ -802,24 +805,39 @@ test.rf$pageviews = NULL
 
 train2 = train.rf[c("subContinent","adwordsClickInfo.page","transactionRevenue")]
 
-# Do the validation set method
+# If using AWS use this
+# train2 = train.rf
+
 library(doParallel)
 mtry = sqrt(ncol(train.rf))
 grid = expand.grid(.mtry=mtry)
 # Unfortunately we have way too many obs. Try to use as many for the training set and use the rest for validation
 ind = sample(1:nrow(train.rf), 200000)
+# If using AWS use the following
+# ind = train.rf
 train = train2[ind,]
 valid = train2[-ind,]
 train$transactionRevenue = log(train$transactionRevenue+1)
 
+# This is the tree object
 rf = randomForest(transactionRevenue~., data=train)
 
+# Do the validation set method for cross validation, just because it's the least
+# computationally intensive. 
+
+# If we had infinite computation power we would use something like:
+# cv = rf.crossValidation(rf, train.rf, n=50)
+# Then use cv to get the best model/parameters and use that for prediction.
+# Or maybe try boostrapping?
+
+# In the meantime, here's the validation set method to get mse for one split.
 # Predict validation
 predval = predict(rf, valid, type="response")
 mse = (predval-valid$transactionRevenue)**2
 mean(mse)
 
-# The crossvalidation score isn't very good. This is because we omitted so much
+# Repeat this as much as necessary using different samples... however, 
+# the crossvalidation score isn't very good. This is because we omitted so much
 # information. The datasize is too large and we cannot process this volume of data.
 # The methodology is the same, regardless.
 
