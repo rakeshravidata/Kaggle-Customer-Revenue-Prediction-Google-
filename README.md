@@ -2,8 +2,10 @@
 
 # Work Done
 OLS/Random Forest in R: Tommy
+
 Random Forest in Python: Rakesh
-Spline: Jingnan
+
+Spline in R: Jingnan
 
 Everyone took part in data cleaning and analysis.
 
@@ -16,4 +18,11 @@ Spline:
 
 # Files Explanation
 explore.R --- OLS Model
+
 exploreNEW.R --- OLR and random forest Model
+
+Kaggle - rk9cx.ipynb --- Models done in Python
+
+Spline_model_newdata.R --- Spline Model
+
+The remaining CSV files are just some different results we have had.
