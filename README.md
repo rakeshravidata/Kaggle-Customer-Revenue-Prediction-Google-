@@ -25,4 +25,6 @@ Kaggle - rk9cx.ipynb --- Models done in Python
 
 Spline_model_newdata.R --- Spline Model
 
+There is also a version for the old data
+
 The remaining CSV files are just some different results we have had.
