@@ -14,7 +14,7 @@ OLS: 1.7454 (Linear Regression w/ LASSO)
 
 Random Forest: 1.7613 (Random forest on subset of data, some naive tranformations)
 
-Spline:
+Spline: 15.7986 (Spline model on the four numerical data, since spline model cannot be applied to discrete data)
 
 # Files Explanation
 explore.R --- OLS Model
