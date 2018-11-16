@@ -23,7 +23,7 @@ exploreNEW.R --- OLR and random forest Model
 
 Kaggle - rk9cx.ipynb --- Models done in Python
 
-Spline_model_newdata.R --- Spline Model
+Spline Model --- Spline Model
 
 There is also a version for the old data
 
